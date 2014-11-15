@@ -9,9 +9,18 @@ class Job(object):
         self.db_job.save()
 
     def update_status(self):
-        new_status =  self.check()
-        current = self.status
+        try:
+            new_status =  self.check()
+        except Exception as e:
+            self.set_status(
+                author = '',
+                value = 'Exception: %s' % str(e),
+                stable = True,
+                error = True
+            )
+            return
 
+        current = self.status
         if (current is None) or (current.as_dict() != new_status):
             self.set_status(**new_status)
 
@@ -29,7 +38,7 @@ class Job(object):
         except DoesNotExist:
             return None
 
-    def set_status(self, author, value, stable):
+    def set_status(self, author, value, stable, error = False):
         models.Status.create(job = self.db_job, author = author, value = value, stable = stable)
 
     @property

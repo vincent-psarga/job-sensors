@@ -11,6 +11,7 @@ class Status(BaseModel):
     author = CharField(null = True)
     value = CharField(null = True)
     stable = BooleanField(default = True)
+    error = BooleanField(default = False)
     date = DateTimeField(default = datetime.datetime.now)
 
     def as_dict(self):

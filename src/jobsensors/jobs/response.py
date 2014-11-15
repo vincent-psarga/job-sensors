@@ -24,12 +24,10 @@ class Response(Job):
             try:
                 index = urlopen(self.url)
             except:
-                status['value'] = 'failure'
-                return status
+                raise Exception('Unable to open page')
 
             if index.getcode() != 200:
-                status['value'] = 'failure'
-                return status
+                raise Exception('Got error: %s' % index.getcode())
 
             responses.append(time() - now)
 
