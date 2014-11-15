@@ -36,5 +36,5 @@ class TravisCI(Job):
         return {
             'author': builds[0].commit.author_name,
             'value': builds[0].passed and 'success' or 'failure',
-            'stable': builds[0].running
+            'stable': not builds[0].running
         }
