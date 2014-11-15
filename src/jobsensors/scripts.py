@@ -5,7 +5,7 @@ def check_jobs():
     while True:
         for job in config.JOBS:
             job.update_status()
-        time.sleep(3)
+        time.sleep(config.SLEEP_TIME)
 
 def current_statuses():
     for job in config.JOBS:
