@@ -5,6 +5,7 @@ from db.models import Job as JobDb
 
 from jobs.job import Job
 
+
 class JobTest(unittest.TestCase):
 
     def setUp(self):
@@ -25,7 +26,6 @@ class JobTest(unittest.TestCase):
         job = Job(10, 'Ho hi')
         self.assertEqual(JobDb.select().count(), 1)
         self.assertEqual(JobDb.get(JobDb.id == 10).name, 'Ho hi')
-
 
     def test_status_update(self):
         job = Job(1, 'My job')

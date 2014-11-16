@@ -7,6 +7,7 @@ STATUS_PENDING = 0
 STATUS_SUCCESS = 1
 STATUS_FAILURE = 2
 
+
 class CI(Job):
     def current_build(self):
         raise NotImplementedError()
@@ -28,19 +29,25 @@ class CI(Job):
             'stable': self.build_stable(build)
         }
 
+
 class Jenkins(CI):
-    def __init__(self, id, name, job_name, url, auth = None):
+    def __init__(self, id, name, job_name, url, auth=None):
         super(Jenkins, self).__init__(id, name)
 
         self.job_name = job_name
-        if auth is None:
-            self.jenkins = jenkins.Jenkins(url)
-        else:
-            self.jenkins = jenkins.Jenkins(url, auth['username'], auth['password'])
+        params = [url]
+        if auth is not None:
+            params.append(auth['username'])
+            params.append(auth['password'])
+
+        self.jenkins = jenkins.Jenkins(*params)
 
     def current_build(self):
         job = self.jenkins.get_job_info(self.job_name)
-        return self.jenkins.get_build_info(self.job_name, job['lastBuild']['number'])
+        return self.jenkins.get_build_info(
+            self.job_name,
+            job['lastBuild']['number']
+        )
 
     def build_author(self, build):
         if build['culprits']:
@@ -65,7 +72,7 @@ class TravisCI(CI):
         self.travis = TravisPy()
 
     def current_build(self):
-        builds = self.travis.builds(slug = self.repo_slug)
+        builds = self.travis.builds(slug=self.repo_slug)
         return builds[0]
 
     def build_author(self, build):

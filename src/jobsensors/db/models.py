@@ -3,16 +3,18 @@ from peewee import *
 
 from db import BaseModel
 
+
 class Job(BaseModel):
-    name = CharField(null = True)
+    name = CharField(null=True)
+
 
 class Status(BaseModel):
-    job = ForeignKeyField(Job, related_name = 'statuses')
-    author = CharField(null = True)
-    value = CharField(null = True)
-    stable = BooleanField(default = True)
-    error = BooleanField(default = False)
-    date = DateTimeField(default = datetime.datetime.now)
+    job = ForeignKeyField(Job, related_name='statuses')
+    author = CharField(null=True)
+    value = CharField(null=True)
+    stable = BooleanField(default=True)
+    error = BooleanField(default=False)
+    date = DateTimeField(default=datetime.datetime.now)
 
     def as_dict(self):
         return {

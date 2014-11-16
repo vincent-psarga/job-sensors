@@ -1,11 +1,13 @@
 import time
 import config
 
+
 def check_jobs():
     while True:
         for job in config.JOBS:
             job.update_status()
         time.sleep(config.SLEEP_TIME)
+
 
 def current_statuses():
     for job in config.JOBS:

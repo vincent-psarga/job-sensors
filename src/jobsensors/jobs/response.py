@@ -3,15 +3,16 @@ from urllib2 import urlopen
 
 from jobs.job import Job
 
+
 class Response(Job):
-    def __init__(self, id, name, url, count = 10):
+    def __init__(self, id, name, url, count=10):
         super(Response, self).__init__(id, name)
         self.url = url
         self.count = count
 
     def open_page(self):
         try:
-            page =  urlopen(self.url)
+            page = urlopen(self.url)
         except:
             raise Exception('Unable to open page')
 
