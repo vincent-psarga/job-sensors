@@ -1,6 +1,9 @@
 Job-sensors
 ===========
 
+[![Build Status](https://travis-ci.org/vincent-psarga/job-sensors.svg?branch=master)](https://travis-ci.org/vincent-psarga/job-sensors)
+
+
 A simple tool to display status of various jobs and alert in case of troubles.
 
 Installing
