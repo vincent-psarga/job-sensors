@@ -4,7 +4,6 @@ from db.utils import setup_db, drop_db
 from db.models import Job as JobDb
 
 from jobs.job import Job
-from jobs.ci import TravisCI
 
 class JobTest(unittest.TestCase):
 

@@ -22,8 +22,7 @@ var/
 .installed.cfg
 *.egg
 
-bin/buildout
-bin/test
+bin/*
 config.py
 *.db
 

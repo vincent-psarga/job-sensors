@@ -1,0 +1,7 @@
+
+[paths]
+source =
+    src/jobsensors
+
+[html]
+directory = coverage_html_report
