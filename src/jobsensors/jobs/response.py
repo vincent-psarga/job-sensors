@@ -1,7 +1,6 @@
 from time import time
 from urllib2 import urlopen
 
-
 from jobs.job import Job
 
 class Response(Job):
@@ -9,6 +8,25 @@ class Response(Job):
         super(Response, self).__init__(id, name)
         self.url = url
         self.count = count
+
+    def open_page(self):
+        try:
+            page =  urlopen(self.url)
+        except:
+            raise Exception('Unable to open page')
+
+        if page.getcode() != 200:
+            raise Exception('Got error: %s' % page.getcode())
+
+        return page
+
+    def get_time(self, func):
+        now = time()
+        value = func()
+        return {
+            'result': value,
+            'time': time() - now
+        }
 
     def check(self):
         responses = []
@@ -18,18 +36,8 @@ class Response(Job):
             'stable': True
         }
 
-        for i in range(0, self.count + 1):
-            now = time()
+        for i in range(0, self.count):
+            responses.append(self.get_time(self.open_page)['time'])
 
-            try:
-                index = urlopen(self.url)
-            except:
-                raise Exception('Unable to open page')
-
-            if index.getcode() != 200:
-                raise Exception('Got error: %s' % index.getcode())
-
-            responses.append(time() - now)
-
-        status['value'] = sum(responses) / self.count
+        status['value'] = sum(responses) / len(responses)
         return status
