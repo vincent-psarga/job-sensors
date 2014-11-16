@@ -40,7 +40,11 @@ class CITest(unittest.TestCase):
         self.sut.build_stable = Mock(return_value = 'True or False')
 
         # It returns the current builds author, status and stability
-        self.assertEqual(self.sut.check(), ('An author', 'Any status', 'True or False'))
+        self.assertEqual(self.sut.check(), {
+            'author': 'An author',
+            'value': 'Any status',
+            'stable': 'True or False'
+        })
         self.sut.build_author.assert_called_with(build)
         self.sut.build_status.assert_called_with(build)
         self.sut.build_stable.assert_called_with(build)

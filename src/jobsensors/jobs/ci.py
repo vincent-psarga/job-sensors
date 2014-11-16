@@ -22,7 +22,11 @@ class CI(Job):
 
     def check(self):
         build = self.current_build()
-        return self.build_author(build), self.build_status(build), self.build_stable(build)
+        return {
+            'author': self.build_author(build),
+            'value': self.build_status(build),
+            'stable': self.build_stable(build)
+        }
 
 class Jenkins(CI):
     def __init__(self, id, name, job_name, url, auth = None):
