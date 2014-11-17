@@ -35,12 +35,15 @@ class Jenkins(CI):
         super(Jenkins, self).__init__(id, name)
 
         self.job_name = job_name
+        self.jenkins = self.get_jenkins(url, auth)
+
+    def get_jenkins(self, url, auth):
         params = [url]
         if auth is not None:
             params.append(auth['username'])
             params.append(auth['password'])
 
-        self.jenkins = jenkins.Jenkins(*params)
+        return jenkins.Jenkins(*params)
 
     def current_build(self):
         job = self.jenkins.get_job_info(self.job_name)
@@ -50,19 +53,19 @@ class Jenkins(CI):
         )
 
     def build_author(self, build):
-        if build['culprits']:
+        if build.get('culprits'):
             return build['culprits'][-1]['fullName']
 
         return ''
 
     def build_status(self, build):
-        if build['result'] == 'SUCCESS':
+        if build.get('result') == 'SUCCESS':
             return STATUS_SUCCESS
 
         return STATUS_FAILURE
 
     def build_stable(self, build):
-        return not build['building']
+        return not build.get('building')
 
 
 class TravisCI(CI):

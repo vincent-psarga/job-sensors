@@ -17,7 +17,6 @@ class MockResponse(object):
 
 
 class ResponseTest(unittest.TestCase):
-
     def setUp(self):
         setup_db()
 
