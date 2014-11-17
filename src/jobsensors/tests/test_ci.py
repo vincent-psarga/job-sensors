@@ -120,3 +120,70 @@ class JenkinsTest(unittest.TestCase):
         # Except if it is specified that it is building
         build['building'] = True
         self.assertFalse(self.sut.build_stable(build))
+
+
+class MockTravisCommit(object):
+    def __init__(self):
+        self.author_name = ''
+
+
+class MockTravisBuild(object):
+    def __init__(self):
+        self.commit = MockTravisCommit()
+        self.pending = False
+        self.passed = False
+        self.running = False
+
+
+class TravisCITest(unittest.TestCase):
+    def setUp(self):
+        setup_db()
+        self.sut = ci.TravisCI(1, 'Job sensors', 'vincent-psarga/job-sensors')
+
+    def tearDown(self):
+        drop_db()
+
+    def test_current_build(self):
+        self.sut.travis.builds = Mock(return_value=[3, 1, 4])
+
+        build = self.sut.current_build()
+
+        # If fetches the builds from the slug given at creation
+        self.sut.travis.builds.assert_called_with(
+            slug='vincent-psarga/job-sensors')
+        # and returns the first one
+        self.assertEqual(build, 3)
+
+    def test_build_author(self):
+        build = MockTravisBuild()
+        build.commit.author_name = 'John Doe'
+
+        # It simply returns the authors name for the commit
+        # that triggered the build
+        self.assertEqual(self.sut.build_author(build), 'John Doe')
+
+    def test_build_status(self):
+        build = MockTravisBuild()
+
+        # If build.pending is true, it returns STATUS_PENDING
+        build.pending = True
+        self.assertEqual(self.sut.build_status(build), ci.STATUS_PENDING)
+
+        # If build.passed is true, it returns STATUS_PASSED
+        build.pending = False
+        build.passed = True
+        self.assertEqual(self.sut.build_status(build), ci.STATUS_SUCCESS)
+
+        # Otherwise, it returns STATUS_FAILURE
+        build.passed = False
+        self.assertEqual(self.sut.build_status(build), ci.STATUS_FAILURE)
+
+    def test_build_stable(self):
+        build = MockTravisBuild()
+        build.running = True
+
+        # The build is considered as unstable as long as it is building
+        self.assertFalse(self.sut.build_stable(build))
+
+        build.running = False
+        self.assertTrue(self.sut.build_stable(build))
