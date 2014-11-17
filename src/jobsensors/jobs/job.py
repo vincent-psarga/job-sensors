@@ -44,7 +44,8 @@ class Job(object):
             job=self.db_job,
             author=author,
             value=value,
-            stable=stable
+            stable=stable,
+            error=error
         )
 
     @property
