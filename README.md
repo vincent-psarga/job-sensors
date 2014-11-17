@@ -6,6 +6,16 @@ Job-sensors
 
 A simple tool to display status of various jobs and alert in case of troubles.
 
+Pre-requisites
+--------------
+
+You'll need the following tools installed:
+
+ - python
+ - sqlite3
+ - espeak
+ - mpg123
+
 Installing
 ----------
 
@@ -24,3 +34,9 @@ Configuring
 Copy config_sample.py as config.py and edit it based on the comments.
 
 
+Starting the tool:
+------------------
+
+We use supervisor for managing the various process. Start them all using the following command:
+
+    bin/supervisord

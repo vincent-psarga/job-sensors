@@ -25,7 +25,8 @@ setup(
         'console_scripts': [
             'setup_db = db.utils:setup_db',
             'check_jobs = scripts:check_jobs',
-            'current_statuses = scripts:current_statuses'
+            'current_statuses = scripts:current_statuses',
+            'sound_notifications = scripts:sound_notifications'
         ]
     },
     long_description="",
