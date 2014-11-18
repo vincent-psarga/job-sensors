@@ -34,6 +34,8 @@ Configuring
 
 Copy config_sample.py as config.py and edit it based on the comments.
 
+You will have to add ome notifications sounds in the sounds folder, called ``site-down.mp3`` and ``site-back.mp3`` that will be played when a monitored site stops working.
+(note: that should be fixed as soon as I find correct open-source sounds for that)
 
 Starting the tool:
 ------------------
