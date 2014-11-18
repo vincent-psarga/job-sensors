@@ -1,5 +1,6 @@
 import os
 import jobs
+from notifiers.notifier import Notifier
 
 
 def get_notifiers(all_jobs):
@@ -11,19 +12,9 @@ def get_notifiers(all_jobs):
     return notifiers
 
 
-class ResponseSoundNotifier(object):
-    def __init__(self, job):
-        self.job = job
-        self.last_notified_id = None
-
-    def check(self):
+class ResponseSoundNotifier(Notifier):
+    def _check(self):
         current = self.job.status
-        if current is None:
-            return
-
-        if self.last_notified_id == current.id:
-            return
-
         current_error = current and current.error
         previous = self.job.previous_status
         previous_error = previous and previous.error
