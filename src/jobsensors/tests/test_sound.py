@@ -28,30 +28,19 @@ class ResponseSoundNotifierTest(unittest.TestCase):
         # It plays the given file using mpg123
         os.system.assert_called_with('mpg123 something.mp3')
 
-    def test_check(self):
+    def test__check(self):
         job = response.Response(1, 'My site', 'http://www.example.com')
         notifier = sound.ResponseSoundNotifier(job)
 
         notifier.play = Mock()
 
-        # There is no status yet, so nothing to play
-        notifier.check()
-        self.assertEqual(notifier.play.call_args_list, [])
-
         job.set_status('', 0.1, True)
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.play.call_args_list, [])
 
         # The site is down: a notification is played
         job.set_status('', '', True, True)
-        notifier.check()
-        self.assertEqual(notifier.play.call_args_list, [
-            call('sounds/site-down.mp3')
-        ])
-
-        # The notifier knows it already notified this error, so it does not
-        # play the sound again.
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.play.call_args_list, [
             call('sounds/site-down.mp3')
         ])
@@ -59,22 +48,14 @@ class ResponseSoundNotifierTest(unittest.TestCase):
         # The site is still down but we do not play a new notification
         # (otherwise no one will be able to concentrate and put the site back)
         job.set_status('', '', True, True)
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.play.call_args_list, [
             call('sounds/site-down.mp3')
         ])
 
         # The site is back, a sound is played
         job.set_status('', '0.1', True)
-        notifier.check()
-        self.assertEqual(notifier.play.call_args_list, [
-            call('sounds/site-down.mp3'),
-            call('sounds/site-back.mp3')
-        ])
-
-        # But it is played only once.
-        job.set_status('', '0.1', True)
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.play.call_args_list, [
             call('sounds/site-down.mp3'),
             call('sounds/site-back.mp3')
@@ -91,28 +72,23 @@ class CISoundNotifierTest(unittest.TestCase):
     def test__check(self):
         job = Job(1, 'Some job')
         notifier = sound.CISoundNotifier(job)
-
         notifier.say = Mock()
-
-        # No status yet, so nothing happens
-        notifier.check()
-        self.assertEqual(notifier.say.call_args_list, [])
 
         # If the first build passes, nothing happens
         job.set_status('Vincent', ci.STATUS_SUCCESS, True)
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.say.call_args_list, [])
 
         # If it fails, a notification is triggered
         job.set_status('Vincent', ci.STATUS_FAILURE, True)
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.say.call_args_list, [
             call('Vincent has broken Some job')
         ])
 
         # If it is fixed, another notification is trigerred
         job.set_status('Vincent', ci.STATUS_SUCCESS, True)
-        notifier.check()
+        notifier._check()
         self.assertEqual(notifier.say.call_args_list, [
             call('Vincent has broken Some job'),
             call('Vincent has fixed Some job')
