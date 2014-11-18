@@ -11,4 +11,8 @@ class Notifier(object):
         if self.last_notified_id == current.id:
             return
 
+        self.last_notified_id = current.id
         self._check()
+
+    def _check(self):
+        raise NotImplementedError()

@@ -3,8 +3,6 @@ from mock import Mock
 from mock import call
 
 import os
-import urllib2
-from time import sleep
 
 from db.utils import setup_db, drop_db
 from jobs.job import Job

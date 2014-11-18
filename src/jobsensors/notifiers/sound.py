@@ -22,11 +22,9 @@ class ResponseSoundNotifier(Notifier):
         previous_error = previous and previous.error
 
         if current_error and not previous_error:
-            self.last_notified_id = current.id
             self.play('sounds/site-down.mp3')
 
         if previous_error and not current_error:
-            self.last_notified_id = current.id
             self.play('sounds/site-back.mp3')
 
     def play(self, sound):
