@@ -1,4 +1,4 @@
-import jobs
+smport jobs
 
 # Time to wait after all jobs are checked. In seconds
 SLEEP_TIME = 30
@@ -14,3 +14,18 @@ JOBS = [
 #  A website: monitors the time to answer (note: does not take into account CSS, assets etc, simply get the HTML page)
 #  jobs.response.Response(4, 'My website', 'http://www.example.com')
 ]
+
+# Options passed to espeak when reading notifications.
+SPEAK_OPTS = "-s 125 -a 200"
+
+# Substitution to get speakable names when needed
+AUTHOR_NAMES_SUBSTITUTIONS = {
+    # 'v.pretre' : 'Vincent',
+    # 'Vincent Pretre': 'Vincent'
+}
+
+# Sentence said when a build fails
+CI_BROKE_SENTENCE = "%(author)s has broken %(job)s"
+
+# Sentence said when a build is fixed
+CI_FIXED_SENTENCE = "%(author)s has fixed %(job)s"

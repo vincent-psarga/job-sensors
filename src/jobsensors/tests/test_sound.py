@@ -7,7 +7,10 @@ import urllib2
 from time import sleep
 
 from db.utils import setup_db, drop_db
+from jobs.job import Job
+from jobs import ci
 from jobs import response
+
 from notifiers import sound
 
 
@@ -17,9 +20,6 @@ class ResponseSoundNotifierTest(unittest.TestCase):
 
     def tearDown(self):
         drop_db()
-
-    def test_check(self):
-        pass
 
     def test_play(self):
         os.system = Mock()
@@ -81,3 +81,109 @@ class ResponseSoundNotifierTest(unittest.TestCase):
             call('sounds/site-down.mp3'),
             call('sounds/site-back.mp3')
         ])
+
+
+class CISoundNotifierTest(unittest.TestCase):
+    def setUp(self):
+        setup_db()
+
+    def tearDown(self):
+        drop_db()
+
+    def test__check(self):
+        job = Job(1, 'Some job')
+        notifier = sound.CISoundNotifier(job)
+
+        notifier.say = Mock()
+
+        # No status yet, so nothing happens
+        notifier.check()
+        self.assertEqual(notifier.say.call_args_list, [])
+
+        # If the first build passes, nothing happens
+        job.set_status('Vincent', ci.STATUS_SUCCESS, True)
+        notifier.check()
+        self.assertEqual(notifier.say.call_args_list, [])
+
+        # If it fails, a notification is triggered
+        job.set_status('Vincent', ci.STATUS_FAILURE, True)
+        notifier.check()
+        self.assertEqual(notifier.say.call_args_list, [
+            call('Vincent has broken Some job')
+        ])
+
+        # If it is fixed, another notification is trigerred
+        job.set_status('Vincent', ci.STATUS_SUCCESS, True)
+        notifier.check()
+        self.assertEqual(notifier.say.call_args_list, [
+            call('Vincent has broken Some job'),
+            call('Vincent has fixed Some job')
+        ])
+
+    def test_substitute_author_name(self):
+        notifier = sound.CISoundNotifier(None)
+
+        # If no substitution is defined, nothing happens
+        self.assertEqual(
+            notifier.substitute_author_name('v.pretre'),
+            'v.pretre'
+        )
+
+        sound.config.AUTHOR_NAMES_SUBSTITUTIONS['v.pretre'] = 'Vincent'
+        self.assertEqual(
+            notifier.substitute_author_name('v.pretre'),
+            'Vincent'
+        )
+
+        # partial substitutions do not work yet
+        self.assertEqual(
+            notifier.substitute_author_name('v.pretre@example.com'),
+            'v.pretre@example.com'
+        )
+        sound.config = {}
+
+    def test_say_broke(self):
+        notifier = sound.CISoundNotifier(Job(1, 'Some job'))
+        notifier.say = Mock()
+
+        notifier.say_broke('Vincent')
+        notifier.say.assert_called_with('Vincent has broken Some job')
+
+        # Message can be overriden in config
+        sound.config.CI_BROKE_SENTENCE = '%(job)s broke by %(author)s, damn'
+        notifier.say_broke('someone')
+        notifier.say.assert_called_with('Some job broke by someone, damn')
+
+        # Username can also be substituted if needed
+        notifier.substitute_author_name = Mock(return_value='King Arthur')
+        notifier.say_broke('someone')
+        notifier.say.assert_called_with('Some job broke by King Arthur, damn')
+        notifier.substitute_author_name.assert_called_with('someone')
+
+    def test_say_fixed(self):
+        notifier = sound.CISoundNotifier(Job(1, 'Some job'))
+        notifier.say = Mock()
+
+        notifier.say_fixed('Vincent')
+        notifier.say.assert_called_with('Vincent has fixed Some job')
+
+        # Message can be overriden in config
+        sound.config.CI_FIXED_SENTENCE = '%(job)s fixed by %(author)s, hurray'
+        notifier.say_fixed('someone')
+        notifier.say.assert_called_with('Some job fixed by someone, hurray')
+
+        # Username can also be substituted if needed
+        notifier.substitute_author_name = Mock(return_value='King Arthur')
+        notifier.say_fixed('someone')
+        notifier.say.assert_called_with(
+            'Some job fixed by King Arthur, hurray')
+        notifier.substitute_author_name.assert_called_with('someone')
+
+    def test_say(self):
+        os.system = Mock()
+        notifier = sound.CISoundNotifier(None)
+
+        sound.config.SPEAK_OPTS = '-v english'
+        notifier.say('Hi, how do you do ?')
+
+        os.system.assert_called_with('espeak -v english "Hi, how do you do ?"')
