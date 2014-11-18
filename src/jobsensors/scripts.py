@@ -4,6 +4,7 @@ import config
 import jobs
 import notifiers
 
+
 def check_jobs():
     while True:
         for job in config.JOBS:
@@ -29,11 +30,10 @@ def current_statuses():
             print ' - date: %s' % current.date
         print ''
 
+
 def sound_notifications():
     sound_notifiers = notifiers.sound.get_notifiers(config.JOBS)
 
     while True:
         for notifier in sound_notifiers:
             notifier.check()
-
-
