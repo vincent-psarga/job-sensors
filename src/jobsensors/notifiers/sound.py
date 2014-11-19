@@ -5,13 +5,19 @@ import config
 from notifiers.notifier import Notifier
 
 
-def get_notifiers(all_jobs):
-    notifiers = []
-    for job in all_jobs:
-        if isinstance(job, jobs.response.Response):
-            notifiers.append(ResponseSoundNotifier(job))
+def get_notifier(job):
+    mapping = {
+        jobs.response.Response: ResponseSoundNotifier,
+        jobs.ci.CI: CISoundNotifier
+    }
+    mapping.update(config.CUSTOM_SOUND_NOTIFIERS)
 
-    return notifiers
+    for cls in mapping.keys():
+        if isinstance(job, cls):
+            return mapping[cls](job)
+
+def get_notifiers(all_jobs):
+    return filter(None, [get_notifier(job) for job in all_jobs])
 
 
 class ResponseSoundNotifier(Notifier):

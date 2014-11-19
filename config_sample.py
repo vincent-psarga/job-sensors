@@ -15,6 +15,13 @@ JOBS = [
 #  jobs.response.Response(4, 'My website', 'http://www.example.com')
 ]
 
+
+# You can specify here some custom sound notifiers.
+# keys are the class for the job, value is the notifier class
+CUSTOM_SOUND_NOTIFIERS = {
+    # mymodule.MyJob: mymodule.notifiers.MyJobSoundNotifier
+}
+
 # Options passed to espeak when reading notifications.
 SPEAK_OPTS = "-s 125 -a 200"
 
