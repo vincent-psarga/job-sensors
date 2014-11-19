@@ -2,25 +2,10 @@ import os
 
 import jobs
 import config
-from notifiers.notifier import Notifier
+from notifiers import notifier
 
 
-def get_notifier(job):
-    mapping = {
-        jobs.response.Response: ResponseSoundNotifier,
-        jobs.ci.CI: CISoundNotifier
-    }
-    mapping.update(config.CUSTOM_SOUND_NOTIFIERS)
-
-    for cls in mapping.keys():
-        if isinstance(job, cls):
-            return mapping[cls](job)
-
-def get_notifiers(all_jobs):
-    return filter(None, [get_notifier(job) for job in all_jobs])
-
-
-class ResponseSoundNotifier(Notifier):
+class ResponseSoundNotifier(notifier.Notifier):
     def _check(self):
         current = self.job.status
         current_error = current and current.error
@@ -37,7 +22,7 @@ class ResponseSoundNotifier(Notifier):
         os.system("mpg123 %s" % sound)
 
 
-class CISoundNotifier(Notifier):
+class CISoundNotifier(notifier.Notifier):
     def _check(self):
         current = self.job.status
         previous = self.job.previous_status
@@ -67,3 +52,17 @@ class CISoundNotifier(Notifier):
 
     def say(self, text):
         os.system('espeak %s "%s"' % (config.SPEAK_OPTS, text))
+
+
+SOUND_NOTIFIER_MAPPING = {
+    jobs.response.Response: ResponseSoundNotifier,
+    jobs.ci.CI: CISoundNotifier
+}
+
+
+def get_notifiers(jobs):
+    return notifier.get_notifiers(
+        jobs,
+        SOUND_NOTIFIER_MAPPING,
+        config.CUSTOM_SOUND_NOTIFIERS
+    )

@@ -9,34 +9,30 @@ from jobs.job import Job
 from jobs import ci
 from jobs import response
 
-from notifiers.notifier import Notifier
+from notifiers import notifier
 from notifiers import sound
 
 
-class GetNotifiersTest(unittest.TestCase):
+class GetNotifierTests(unittest.TestCase):
     def setUp(self):
         setup_db()
 
     def tearDown(self):
         drop_db()
 
-    def test_get_notifier(self):
-        # Well, unknown jobs do not have notifiers
-        self.assertIsNone(sound.get_notifier(Job(1, '')))
-
-        ci_job = ci.CI(1, 'My job')
-        self.assertIsInstance(
-            sound.get_notifier(ci_job),
-            sound.CISoundNotifier
-        )
-
-        response_job = response.Response(1, 'My job', 'http://www.example.com')
-        self.assertIsInstance(
-            sound.get_notifier(response_job),
-            sound.ResponseSoundNotifier
-        )
-
     def test_get_notifiers(self):
+        notifier.get_notifiers = Mock()
+
+        sound.get_notifiers([])
+        notifier.get_notifiers.assert_called_with(
+            [],
+            sound.SOUND_NOTIFIER_MAPPING,
+            sound.config.CUSTOM_SOUND_NOTIFIERS
+        )
+
+    def test_check_mapping(self):
+        # Just to be sure we have the correct values ;)
+
         job = Job(1, 'Whatever')
         ci_job = ci.CI(2, 'My job')
         response_job = response.Response(3, 'My job', 'http://www.example.com')
@@ -52,20 +48,6 @@ class GetNotifiersTest(unittest.TestCase):
             notifiers[1],
             sound.ResponseSoundNotifier
         )
-
-    def test_custom_notifiers(self):
-        class CustomSoundNotifier(Notifier):
-            pass
-
-        class CustomJob(Job):
-            pass
-
-        my_job = CustomJob(1, 'My custom job')
-        self.assertIsNone(sound.get_notifier(my_job))
-
-        sound.config.CUSTOM_SOUND_NOTIFIERS[CustomJob] = CustomSoundNotifier
-        self.assertIsInstance(sound.get_notifier(my_job), CustomSoundNotifier)
-        sound.config.CUSTOM_SOUND_NOTIFIERS = {}
 
 class ResponseSoundNotifierTest(unittest.TestCase):
     def setUp(self):
