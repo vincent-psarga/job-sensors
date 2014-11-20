@@ -22,3 +22,17 @@ class Status(BaseModel):
             'value': self.value,
             'stable': self.stable
         }
+
+    @property
+    def color(self):
+        try:
+            return self.colors.get()
+        except DoesNotExist:
+            return None
+
+
+class StatusColor(BaseModel):
+    status = ForeignKeyField(Status, related_name='colors')
+    color = CharField(default = '000000')
+    blink = BooleanField(default=False)
+    pulse = BooleanField(default=False)

@@ -3,9 +3,9 @@ from travispy.travispy import TravisPy
 
 from jobs.job import Job
 
-STATUS_PENDING = 0
-STATUS_SUCCESS = 1
-STATUS_FAILURE = 2
+STATUS_PENDING = 'pending'
+STATUS_SUCCESS = 'success'
+STATUS_FAILURE = 'failure'
 
 
 class CI(Job):

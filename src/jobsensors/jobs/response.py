@@ -5,10 +5,12 @@ from jobs.job import Job
 
 
 class Response(Job):
-    def __init__(self, id, name, url, count=10):
+    def __init__(self, id, name, url, count=10, min_time=0.5, max_time=1.5):
         super(Response, self).__init__(id, name)
         self.url = url
         self.count = count
+        self.min_time = float(min_time)
+        self.max_time = float(max_time)
 
     def open_page(self):
         try:

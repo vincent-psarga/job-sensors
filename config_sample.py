@@ -1,4 +1,5 @@
-smport jobs
+import jobs
+from utils import colors
 
 # Time to wait after all jobs are checked. In seconds
 SLEEP_TIME = 30
@@ -15,6 +16,9 @@ JOBS = [
 #  jobs.response.Response(4, 'My website', 'http://www.example.com')
 ]
 
+###############################################################################
+                                    SOUNDS
+###############################################################################
 
 # You can specify here some custom sound notifiers.
 # keys are the class for the job, value is the notifier class
@@ -36,3 +40,26 @@ CI_BROKE_SENTENCE = "%(author)s has broken %(job)s"
 
 # Sentence said when a build is fixed
 CI_FIXED_SENTENCE = "%(author)s has fixed %(job)s"
+
+###############################################################################
+                                    COLORS
+###############################################################################
+
+# Same principle than CUSTOM_SOUND_NOTIFIERS
+CUSTOM_COLOR_NOTIFIERS = {}
+
+# The default color displayed when no data is available
+DEFAULT_COLOR = colors.BLUE
+# The color displayed when a job failed
+ERROR_COLOR = colors.ORANGE
+
+# Color for CI checkers
+CI_SUCCESS_COLOR = colors.GREEN
+CI_FAILURE_COLOR = colors.RED
+CI_PENDING_COLOR = colors.YELLOW
+
+# Response color:
+# - when the site responds too slowly
+RESPONSE_SLOW_COLOR = colors.RED
+# - when the site responds well
+RESPONSE_FAST_COLOR = colors.GREEN
