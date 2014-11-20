@@ -15,3 +15,7 @@ div.job {
   text-align: center;
   border: 1px solid black;
 }
+
+div.job span.status {
+  margin-right: 15px;
+}
