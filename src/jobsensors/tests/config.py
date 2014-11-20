@@ -17,7 +17,7 @@ JOBS = [
 ]
 
 ###############################################################################
-                                    SOUNDS
+#                                   SOUNDS
 ###############################################################################
 
 # You can specify here some custom sound notifiers.
@@ -42,7 +42,7 @@ CI_BROKE_SENTENCE = "%(author)s has broken %(job)s"
 CI_FIXED_SENTENCE = "%(author)s has fixed %(job)s"
 
 ###############################################################################
-                                    COLORS
+#                                   COLORS
 ###############################################################################
 
 # Same principle than CUSTOM_SOUND_NOTIFIERS
