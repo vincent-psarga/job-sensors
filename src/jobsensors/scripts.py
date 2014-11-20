@@ -3,7 +3,7 @@ import config
 
 import jobs
 import notifiers
-
+from web_frontend import app
 
 def check_jobs():
     while True:
@@ -51,3 +51,6 @@ def color_notifications():
     while True:
         for notifier in color_notifiers:
             notifier.check()
+
+def web_frontend():
+    app.run()

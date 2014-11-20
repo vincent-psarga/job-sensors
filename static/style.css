@@ -1,0 +1,17 @@
+body {
+  text-align: center;
+}
+
+#jobs {
+  margin: 0 auto;
+}
+
+div.job {
+  display: inline-block;
+  width: 28%;
+  height: 150px;
+  margin: 3px;
+
+  text-align: center;
+  border: 1px solid black;
+}

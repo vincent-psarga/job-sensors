@@ -19,7 +19,9 @@ setup(
     install_requires=[
         'peewee',
         'python-jenkins',
-        'travispy'
+        'travispy',
+        'Flask',
+        'Flask-Assets'
     ],
     entry_points={
         'console_scripts': [
@@ -27,7 +29,8 @@ setup(
             'check_jobs = scripts:check_jobs',
             'current_statuses = scripts:current_statuses',
             'sound_notifications = scripts:sound_notifications',
-            'color_notifications = scripts:color_notifications'
+            'color_notifications = scripts:color_notifications',
+            'web_frontend = scripts:web_frontend'
         ]
     },
     long_description="",

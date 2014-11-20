@@ -29,6 +29,10 @@ class Job(object):
         pass
 
     @property
+    def id(self):
+        return self.db_job.id
+
+    @property
     def name(self):
         return self.db_job.name
 
