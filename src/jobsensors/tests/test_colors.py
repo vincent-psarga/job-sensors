@@ -63,7 +63,8 @@ class ResponseColorNotifierTest(unittest.TestCase):
         drop_db()
 
     def test_assign_color(self):
-        job = response.Response(1, 'My site', 'http://example.com', min_time = 0, max_time = 1)
+        job = response.Response(1, 'My site', 'http://example.com',
+                                min_time=0, max_time=1)
         notifier = colors.ResponseColorNotifier(job)
 
         # When the response is close to the minimum one, we get the color
@@ -80,7 +81,6 @@ class ResponseColorNotifierTest(unittest.TestCase):
         self.assertEqual(job.status.color.color, config.RESPONSE_SLOW_COLOR)
         self.assertFalse(job.status.color.blink)
         self.assertFalse(job.status.color.pulse)
-
 
         # And in the middle we get something in between those colors.
         job.set_status('', '0.5', True)

@@ -44,6 +44,7 @@ def sound_notifications():
         for notifier in sound_notifiers:
             notifier.check()
 
+
 def color_notifications():
     color_notifiers = notifiers.colors.get_notifiers(config.JOBS)
 

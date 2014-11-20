@@ -49,6 +49,7 @@ class GetNotifierTests(unittest.TestCase):
             sound.ResponseSoundNotifier
         )
 
+
 class ResponseSoundNotifierTest(unittest.TestCase):
     def setUp(self):
         setup_db()

@@ -3,6 +3,7 @@ from mock import Mock
 
 import utils
 
+
 class UtilsColorTests(unittest.TestCase):
     def not_a_test_just_visual_stuff(self):
         # Just in case someone wants a more visual sample.
@@ -12,7 +13,8 @@ class UtilsColorTests(unittest.TestCase):
 
         for i in range(0, 101):
             ratio = i / 100.0
-            print '<div style="background: #%s">%s</div>' % (utils.colors.mix_colors(color1, color2, ratio), ratio)
+            print '<div style="background: #%s">%s</div>' % (
+                utils.colors.mix_colors(color1, color2, ratio), ratio)
 
     def test_mix_colors(self):
         # When ratio is zero, we get the first color
@@ -42,7 +44,8 @@ class UtilsColorTests(unittest.TestCase):
         # It can be used to get octarine too, but I'm not sure it's supposed
         # to look like this.
         self.assertEqual(
-            utils.colors.mix_colors(utils.colors.PURPLE, utils.colors.ORANGE, 0.5),
+            utils.colors.mix_colors(
+                utils.colors.PURPLE, utils.colors.ORANGE, 0.5),
             'bf5240'
         )
 
@@ -52,6 +55,7 @@ class UtilsColorTests(unittest.TestCase):
             utils.colors.RED
         )
         self.assertEqual(
-            utils.colors.mix_colors(utils.colors.RED, utils.colors.GREEN, 3.14),
+            utils.colors.mix_colors(
+                utils.colors.RED, utils.colors.GREEN, 3.14),
             utils.colors.GREEN
         )

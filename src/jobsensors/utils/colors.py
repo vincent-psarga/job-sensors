@@ -1,4 +1,5 @@
-# Based on the color list from PixelPi: https://github.com/scottjgibson/PixelPi/blob/master/pixelpi.py
+# Based on the color list from PixelPi:
+# https://github.com/scottjgibson/PixelPi/blob/master/pixelpi.py
 from various import bound
 
 

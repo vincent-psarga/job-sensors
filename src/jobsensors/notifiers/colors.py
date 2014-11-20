@@ -10,7 +10,7 @@ class ColorNotifier(notifier.Notifier):
     def _check(self):
         current = self.job.status
         if current.error:
-            self.set_color(config.ERROR_COLOR, blink = True)
+            self.set_color(config.ERROR_COLOR, blink=True)
             return
 
         self.assign_color(current)
@@ -18,12 +18,13 @@ class ColorNotifier(notifier.Notifier):
     def assign_color(self, status):
         raise NotImplementedError()
 
-    def set_color(self, color, blink = False, pulse = False):
+    def set_color(self, color, blink=False, pulse=False):
         db_col = StatusColor.get_or_create(status=self.job.status)
         db_col.color = color
         db_col.blink = blink
         db_col.pulse = pulse
         db_col.save()
+
 
 class ResponseColorNotifier(ColorNotifier):
     def assign_color(self, status):

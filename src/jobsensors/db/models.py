@@ -33,6 +33,6 @@ class Status(BaseModel):
 
 class StatusColor(BaseModel):
     status = ForeignKeyField(Status, related_name='colors')
-    color = CharField(default = '000000')
+    color = CharField(default='000000')
     blink = BooleanField(default=False)
     pulse = BooleanField(default=False)
