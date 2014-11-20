@@ -23,7 +23,7 @@ var/
 *.egg
 
 bin/*
-config.py
+/config.py
 *.db
 
 
