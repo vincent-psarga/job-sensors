@@ -23,9 +23,15 @@ def current_statuses():
         if current is None:
             print 'No status ...'
         else:
+            color = current.color
             print 'Latest status:'
             print ' - author: %s' % current.author
             print ' - value: %s' % current.value
+            print ' - color: %s [%s - %s]' % (
+                color.color,
+                color.blink and 'v' or ' ',
+                color.pulse and 'v' or ' '
+            )
             print ' - stable: %s' % current.stable
             print ' - date: %s' % current.date
         print ''
@@ -36,4 +42,11 @@ def sound_notifications():
 
     while True:
         for notifier in sound_notifiers:
+            notifier.check()
+
+def color_notifications():
+    color_notifiers = notifiers.colors.get_notifiers(config.JOBS)
+
+    while True:
+        for notifier in color_notifiers:
             notifier.check()

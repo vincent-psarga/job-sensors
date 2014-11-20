@@ -26,7 +26,8 @@ setup(
             'setup_db = db.utils:setup_db',
             'check_jobs = scripts:check_jobs',
             'current_statuses = scripts:current_statuses',
-            'sound_notifications = scripts:sound_notifications'
+            'sound_notifications = scripts:sound_notifications',
+            'color_notifications = scripts:color_notifications'
         ]
     },
     long_description="",
