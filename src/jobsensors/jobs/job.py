@@ -5,7 +5,7 @@ from db import models
 
 class Job(object):
     def __init__(self, id, name):
-        self.db_job = models.Job.get_or_create(id=id)
+        self.db_job = models.Job.get_or_create(id=id)[0]
         self.db_job.name = name
         self.db_job.save()
 

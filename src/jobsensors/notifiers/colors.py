@@ -19,7 +19,7 @@ class ColorNotifier(notifier.Notifier):
         raise NotImplementedError()
 
     def set_color(self, color, blink=False, pulse=False):
-        db_col = StatusColor.get_or_create(status=self.job.status)
+        db_col = StatusColor.get_or_create(status=self.job.status)[0]
         db_col.color = color
         db_col.blink = blink
         db_col.pulse = pulse
