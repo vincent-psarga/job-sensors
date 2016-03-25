@@ -43,6 +43,7 @@ def sound_notifications():
     while True:
         for notifier in sound_notifiers:
             notifier.check()
+        time.sleep(config.SLEEP_TIME)
 
 
 def color_notifications():
@@ -51,6 +52,7 @@ def color_notifications():
     while True:
         for notifier in color_notifiers:
             notifier.check()
+        time.sleep(config.SLEEP_TIME)
 
 def web_frontend():
     app.run()
